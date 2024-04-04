@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from skimage.draw import line
 
 class Table:
 
@@ -8,6 +9,8 @@ class Table:
         self.length = int(46 * 16 + 2*self.wall)
         self.width = int(26.75 * 16 + 2*self.wall)
         self.goal = int(6.875 * 16)
+        self.backWallLength = ((self.width - self.goal) / 2)
+        self.goalRange = (int(self.backWallLength), int(self.backWallLength + self.goal))
         self.polegap = int(5 * 16)
         self.oneManGap = int(2.875 * 16 + self.wall)
         self.pieceWidth = int(0.75 * 16)
@@ -56,20 +59,16 @@ class Table:
 
         ###Add walls and Goals to either side
 
-        backWallLength = ((self.width - self.goal) / 2)
-
-        goalRange = (int(backWallLength), int(backWallLength + self.goal))
-
-        for i in range(0, int(goalRange[0])):
+        for i in range(0, int(self.goalRange[0])):
             table[i, 0:40] = 3
             table[i, -40:] = 3
 
 
-        for i in range(int(goalRange[0]), int(goalRange[1])):
+        for i in range(int(self.goalRange[0]), int(self.goalRange[1])):
             table[i, 0:40] = 9
             table[i, -40:] = 9
 
-        for i in range(int(goalRange[1]), int(self.width)):
+        for i in range(int(self.goalRange[1]), int(self.width)):
             table[i, 0:40] = 3
             table[i, -40:] = 3
 
@@ -234,13 +233,53 @@ class Table:
             table[i, ballX[0]:ballX[1]] = 8
 
         return table
+    
+
+    def find_valid_angles(self, ballPosition):
+        valid_angles = []
+
+        
+            
+
+
+        
+
+
+
+        return valid_angles
+
+
+
 
 table = Table()
+goal_range = (int((table.width - table.goal) / 2), int((table.width - table.goal) / 2) + table.goal)
+#valid_angles = table.find_valid_angles(goal_range, table.ballDiameter)
 
-build = table.buildTable()
+matrix = table.buildTable()
 
-plt.imshow(build, cmap='viridis')
+
+
+for i in range(int(table.goalRange[0]), int(table.goalRange[1]), 8):
+    
+    x = [550, 775]
+    y = [80, i]
+
+    rr, cc = line(y[0], x[0], y[1], x[1])
+
+    intersects = False
+    for r, c in zip(rr, cc):
+        if matrix[r, c] == 7:
+            intersects = True
+            break
+    
+    if not intersects:
+        # Iterate through each point of the line and plot it
+        for r, c in zip(rr, cc):
+            plt.plot(c, r, color="white", marker='.', markersize=1)
+
+# Plot the foosball table
+plt.imshow(matrix, cmap='viridis')
+
 plt.colorbar()
 plt.show()
-
 
