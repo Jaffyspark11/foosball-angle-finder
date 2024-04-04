@@ -221,8 +221,17 @@ class Table:
             table[i, poleRanges[0][0]:poleRanges[0][1]] = 2
             table[i, poleRanges[7][0]:poleRanges[7][1]] = 2
         
+        #add Ball
 
+        ballPositionY = ((self.width - self.ballDiameter) / 2)
+        ballPositionX = ((self.length - self.ballDiameter) / 2)
 
+        ballY = (int(ballPositionY), int(ballPositionY + self.ballDiameter))
+        ballX = (int(ballPositionX), int(ballPositionX + self.ballDiameter))
+
+        for i in range(ballY[0], ballY[1]):
+
+            table[i, ballX[0]:ballX[1]] = 8
 
         return table
 
