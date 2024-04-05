@@ -215,7 +215,7 @@ class Table:
             
         poleRanges = self.poleRanges
         
-        print(poleRanges)
+
         
         for i in range(int(poleRanges[0][0]), int(poleRanges[0][1])):
 
@@ -299,7 +299,6 @@ class Table:
                 # Plot the line using only the endpoints
                 valid_angles.append((x, y))
 
-        print(valid_angles)
         return valid_angles
 
 
@@ -316,92 +315,116 @@ displacement_sliders = {
 }
 
 
+
 # Instantiate the Table class
 table = Table()
 
 # Build the foosball table matrix
 matrix = table.buildTable(displacement_sliders)
 
-# Plot the foosball table
-fig, ax = plt.subplots()
-plt.subplots_adjust(bottom=0.35)
+fig, ax = plt.subplots(figsize=(10, 8))
+plt.subplots_adjust(bottom=0.4, left=0.1, right=0.9, top=0.95)
 plt.imshow(matrix, cmap='viridis')
 
 # Initial ball position
 ball_x_initial = 560
 ball_y_initial = table.width / 2
 
+ballPosition = {
+    "ball_x": int(ball_x_initial),
+    "ball_y": int(ball_y_initial),
+}
+
 # Plot the initial ball position
-ball_plot, = plt.plot(ball_x_initial, ball_y_initial, 'ro')
+ball_plot, = plt.plot(ballPosition['ball_x'], ballPosition['ball_y'], 'ro')
 
 # Slider for adjusting ball position
-ax_ball_position = plt.axes([0.1, 0.2, 0.65, 0.03])
+ax_ball_position = plt.axes([0.1, 0.25, 0.65, 0.03])
 slider_ball_position = Slider(ax_ball_position, 'Ball Position', 40, table.width - 40, valinit=ball_y_initial)
 
 # Slider for adjusting displacement of P1 OneMan
-ax_p1_oneman_displacement = plt.axes([0.1, 0.1, 0.65, 0.03])
+ax_p1_oneman_displacement = plt.axes([0.2, 0.2, 0.3, 0.03])
 slider_p1_oneman_displacement = Slider(ax_p1_oneman_displacement, 'P1 OneMan Displacement', 0, 160, valinit=0)
 
 # Slider for adjusting displacement of P2 OneMan
-ax_p2_oneman_displacement = plt.axes([0.1, 0.05, 0.65, 0.03])
+ax_p2_oneman_displacement = plt.axes([0.6, 0.2, 0.3, 0.03])
 slider_p2_oneman_displacement = Slider(ax_p2_oneman_displacement, 'P2 OneMan Displacement', 0, 160, valinit=0)
 
 # Slider for adjusting displacement of P1 twoman
-ax_p1_twoman_displacement = plt.axes([0.1, 0.1, 0.65, 0.03])
+ax_p1_twoman_displacement = plt.axes([0.2, 0.15, 0.3, 0.03])
 slider_p1_twoman_displacement = Slider(ax_p1_twoman_displacement, 'P1 twoman Displacement', 0, 160, valinit=0)
 
 # Slider for adjusting displacement of P2 twoman
-ax_p2_twoman_displacement = plt.axes([0.1, 0.05, 0.65, 0.03])
+ax_p2_twoman_displacement = plt.axes([0.6, 0.15, 0.3, 0.03])
 slider_p2_twoman_displacement = Slider(ax_p2_twoman_displacement, 'P2 twoman Displacement', 0, 160, valinit=0)
 
 # Slider for adjusting displacement of P1 threeman
-ax_p1_threeman_displacement = plt.axes([0.1, 0.1, 0.65, 0.03])
+ax_p1_threeman_displacement = plt.axes([0.2, 0.1, 0.3, 0.03])
 slider_p1_threeman_displacement = Slider(ax_p1_threeman_displacement, 'P1 threeman Displacement', 0, 160, valinit=0)
 
 # Slider for adjusting displacement of P2 threeman
-ax_p2_threeman_displacement = plt.axes([0.1, 0.05, 0.65, 0.03])
+ax_p2_threeman_displacement = plt.axes([0.6, 0.1, 0.3, 0.03])
 slider_p2_threeman_displacement = Slider(ax_p2_threeman_displacement, 'P2 threeman Displacement', 0, 160, valinit=0)
 
 # Slider for adjusting displacement of P1 fiveman
-ax_p1_fiveman_displacement = plt.axes([0.1, 0.1, 0.65, 0.03])
+ax_p1_fiveman_displacement = plt.axes([0.2, 0.05, 0.3, 0.03])
 slider_p1_fiveman_displacement = Slider(ax_p1_fiveman_displacement, 'P1 fiveman Displacement', 0, 160, valinit=0)
 
 # Slider for adjusting displacement of P2 fiveman
-ax_p2_fiveman_displacement = plt.axes([0.1, 0.05, 0.65, 0.03])
+ax_p2_fiveman_displacement = plt.axes([0.6, 0.05, 0.3, 0.03])
 slider_p2_fiveman_displacement = Slider(ax_p2_fiveman_displacement, 'P2 fiveman Displacement', 0, 160, valinit=0)
+
 
 def update_p1_oneman_displacement(val):
     displacement_sliders["P1OneMan"] = int(val)
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
 
 def update_p2_oneman_displacement(val):
     displacement_sliders["P2OneMan"] = int(val)
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
 
 def update_p1_twoman_displacement(val):
     displacement_sliders["P1TwoMan"] = int(val)
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
 
 def update_p2_twoman_displacement(val):
     displacement_sliders["P2TwoMan"] = int(val)
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
 
 def update_p1_threeman_displacement(val):
     displacement_sliders["P1ThreeMan"] = int(val)
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
 
 def update_p2_threeman_displacement(val):
     displacement_sliders["P2ThreeMan"] = int(val)
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
 
 def update_p1_fiveman_displacement(val):
     displacement_sliders["P1FiveMan"] = int(val)
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
 
 def update_p2_fiveman_displacement(val):
     displacement_sliders["P2FiveMan"] = int(val)
-    
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()   
 
-def confirm_ball_position(event):
-    ball_y = int(slider_ball_position.val)
-    ball_plot.set_data(ball_x_initial, ball_y)
-    fig.canvas.draw_idle()
-    print(displacement_sliders["P2OneMan"])
 
-def confirm_pieces_position(event):
+def find_angles_from_position(event):
     displacement_sliders["P1OneMan"] = int(slider_p1_oneman_displacement.val)
     displacement_sliders["P2OneMan"] = int(slider_p2_oneman_displacement.val)
     displacement_sliders["P1TwoMan"] = int(slider_p1_twoman_displacement.val)
@@ -415,8 +438,8 @@ def confirm_pieces_position(event):
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
     
-    ball_y = int(slider_ball_position.val)
-    ball_x = ball_x_initial
+    ball_y = ballPosition['ball_y']
+    ball_x = ballPosition['ball_x']
 
     valid_angles = table.find_valid_angles((ball_x, ball_y), new_matrix)
 
@@ -430,6 +453,8 @@ def confirm_pieces_position(event):
     ball_plot.set_data(ball_x, ball_y)
     fig.canvas.draw_idle()
 
+    update(slider_ball_position.val)
+
 
 slider_p1_oneman_displacement.on_changed(update_p1_oneman_displacement)
 slider_p2_oneman_displacement.on_changed(update_p2_oneman_displacement)
@@ -440,40 +465,20 @@ slider_p2_threeman_displacement.on_changed(update_p2_threeman_displacement)
 slider_p1_fiveman_displacement.on_changed(update_p1_fiveman_displacement)
 slider_p2_fiveman_displacement.on_changed(update_p2_fiveman_displacement)
 
-ax_button_confirm_ball = plt.axes([0.1, 0.3, 0.2, 0.04])
-button_confirm_ball = Button(ax_button_confirm_ball, 'Confirm Ball Position')
-button_confirm_ball.on_clicked(confirm_ball_position)
 
 ax_button_confirm_pieces = plt.axes([0.4, 0.3, 0.2, 0.04])
-button_confirm_pieces = Button(ax_button_confirm_pieces, 'Confirm Pieces Position')
-button_confirm_pieces.on_clicked(confirm_pieces_position)
+button_confirm_pieces = Button(ax_button_confirm_pieces, 'Find Angles')
+button_confirm_pieces.on_clicked(find_angles_from_position)
 
 def update(val):
-    ball_y = int(val)
-    ball_x = ball_x_initial
-    ball_plot.set_data(ball_x, ball_y)
+    ballPosition['ball_y'] = int(val)
+    ballPosition['ball_x'] = ball_x_initial
+    ball_plot.set_data(ballPosition['ball_x'], ballPosition['ball_y'])
     fig.canvas.draw_idle()
 
-def on_button_press(event):
-    ball_y = int(slider_ball_position.val)
-    ball_x = ball_x_initial
-
-    valid_angles = table.find_valid_angles((ball_x, ball_y), matrix)
-
-    for line in ax.lines:
-        line.remove()
-
-    for line in valid_angles:
-        x, y = line
-        ax.plot([x[0], x[1]], [y[0], y[1]], color="white")
-
-    ball_plot.set_data(ball_x, ball_y)
-    fig.canvas.draw_idle()
 
 
 slider_ball_position.on_changed(update)
-ax_button_find_angles = plt.axes([0.7, 0.3, 0.2, 0.04])
-button_find_angles = Button(ax_button_find_angles, 'Find Angles')
-button_find_angles.on_clicked(on_button_press)
+
 
 plt.show()
