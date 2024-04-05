@@ -220,18 +220,6 @@ class Table:
         for i in range(int(self.oneMan[1] + self.oneManStopperGap), int(self.oneMan[1] + self.oneManStopperGap + self.stopper)):
             table[i, poleRanges[0][0]:poleRanges[0][1]] = 2
             table[i, poleRanges[7][0]:poleRanges[7][1]] = 2
-        
-        #add Ball
-
-        ballPositionY = ((self.width - self.ballDiameter) / 2)
-        ballPositionX = ((self.length - self.ballDiameter) / 2)
-
-        ballY = (int(ballPositionY), int(ballPositionY + self.ballDiameter))
-        ballX = (int(ballPositionX), int(ballPositionX + self.ballDiameter))
-
-        for i in range(ballY[0], ballY[1]):
-
-            table[i, ballX[0]:ballX[1]] = 8
 
         return table
     
@@ -263,11 +251,10 @@ class Table:
                     break
             
             if not intersects:
-                # Iterate through each point of the line and plot it
-                valid_angles.append((rr, cc))
-                for r, c in zip(rr, cc):
-                    plt.plot(c, r, color="white", marker='.', markersize=1)
-            
+                # Plot the line using only the endpoints
+                valid_angles.append((x, y))
+
+        print(valid_angles)
         return valid_angles
 
 
@@ -284,7 +271,7 @@ plt.subplots_adjust(bottom=0.25)
 plt.imshow(matrix, cmap='viridis')
 
 # Initial ball position
-ball_x_initial = 550
+ball_x_initial = 560
 ball_y_initial = 140
 
 # Plot the initial ball position
@@ -306,24 +293,33 @@ def update(val):
     ball_plot.set_data(ball_x, ball_y)
     fig.canvas.draw_idle()
 
+    # Update the initial x coordinate for future slider updates
+    global ball_y_initial
+    ball_y_initial = ball_y
+
 def on_button_press(event):
     ball_y = int(slider_ball_position.val)
     ball_x = ball_x_initial
 
-    # Clear previous ball position plot
-    ball_plot.set_data([], [])
-
     # Find valid angles for the updated ball position
     valid_angles = table.find_valid_angles((ball_x, ball_y))
 
+    # Clear previous valid angles plot
+    for line in ax.lines:
+        line.remove()
+
     # Plot the valid angles
-    for rr, cc in valid_angles:
-        for r, c in zip(rr, cc):
-            plt.plot(c, r, color="white", marker='.', markersize=1)
+    for line in valid_angles:
+        x, y = line
+        ax.plot([x[0], x[1]], [y[0], y[1]], color="white")
     
-    # Plot the updated ball position
+    # Update the ball position
     ball_plot.set_data(ball_x, ball_y)
+    
+    # Update the canvas
     fig.canvas.draw_idle()
+
+    ax.plot(ball_x, ball_y, 'ro')
 
 # Register the update function to the slider
 slider_ball_position.on_changed(update)
