@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Button, Slider
 from skimage.draw import line
 
 class Table:
@@ -271,22 +272,63 @@ class Table:
 
 
 
-
+# Instantiate the Table class
 table = Table()
-goal_range = (int((table.width - table.goal) / 2), int((table.width - table.goal) / 2) + table.goal)
-#valid_angles = table.find_valid_angles(goal_range, table.ballDiameter)
 
+# Build the foosball table matrix
 matrix = table.buildTable()
 
-
-
-
-
 # Plot the foosball table
+fig, ax = plt.subplots()
+plt.subplots_adjust(bottom=0.25)
 plt.imshow(matrix, cmap='viridis')
 
-angles = table.find_valid_angles((600,150))
-print(angles)
-plt.colorbar()
-plt.show()
+# Initial ball position
+ball_x_initial = 550
+ball_y_initial = 140
 
+# Plot the initial ball position
+ball_plot, = plt.plot(ball_x_initial, ball_y_initial, 'ro')
+
+# Slider for adjusting ball position
+ax_ball_position = plt.axes([0.25, 0.1, 0.65, 0.03])
+slider_ball_position = Slider(ax_ball_position, 'Ball Position', 40, table.width - 40, valinit=ball_y_initial)
+
+# Button for updating valid angles
+ax_button = plt.axes([0.8, 0.025, 0.1, 0.04])
+button_update = Button(ax_button, 'Update')
+
+def update(val):
+    ball_y = int(val)
+    ball_x = ball_x_initial
+    
+    # Plot the updated ball position
+    ball_plot.set_data(ball_x, ball_y)
+    fig.canvas.draw_idle()
+
+def on_button_press(event):
+    ball_y = int(slider_ball_position.val)
+    ball_x = ball_x_initial
+
+    # Clear previous ball position plot
+    ball_plot.set_data([], [])
+
+    # Find valid angles for the updated ball position
+    valid_angles = table.find_valid_angles((ball_x, ball_y))
+
+    # Plot the valid angles
+    for rr, cc in valid_angles:
+        for r, c in zip(rr, cc):
+            plt.plot(c, r, color="white", marker='.', markersize=1)
+    
+    # Plot the updated ball position
+    ball_plot.set_data(ball_x, ball_y)
+    fig.canvas.draw_idle()
+
+# Register the update function to the slider
+slider_ball_position.on_changed(update)
+
+# Register the button press function to the button
+button_update.on_clicked(on_button_press)
+
+plt.show()
