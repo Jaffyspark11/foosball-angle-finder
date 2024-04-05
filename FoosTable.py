@@ -43,6 +43,16 @@ class Table:
             int(self.stopper + self.wall + self.oneManStopperGap),
             int(self.stopper + self.wall + self.oneManStopperGap + self.pieceWidth)
         ]
+        self.poleRanges = [
+            [self.oneManGap, self.oneManGap + self.poleWidth],
+            [self.oneManGap + self.poleWidth + self.polegap, self.oneManGap + self.poleWidth + self.polegap + self.poleWidth],
+            [self.oneManGap + 2 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 2 * (self.polegap + self.poleWidth)],
+            [self.oneManGap + 3 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 3 * (self.polegap + self.poleWidth)],
+            [self.oneManGap + 4 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 4 * (self.polegap + self.poleWidth)],
+            [self.oneManGap + 5 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 5 * (self.polegap + self.poleWidth)],
+            [self.oneManGap + 6 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 6 * (self.polegap + self.poleWidth)],
+            [self.oneManGap + 7 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 7 * (self.polegap + self.poleWidth)],           
+        ]
 
 
     ##### Matrix Definitions
@@ -54,7 +64,135 @@ class Table:
         #pole = 4
         #blocker = 2
 
-    def buildTable(self):
+
+
+    def addP1OneMan(self, table, displacement=0):
+
+        for i in range(self.wall + displacement, self.wall + self.stopper + displacement):
+            table[i, self.poleRanges[0][0]:self.poleRanges[0][1]] = 2
+            
+        for i in range(int(self.oneMan[0] + displacement), int(self.oneMan[1] + displacement)):
+            table[i, self.poleRanges[0][0]:self.poleRanges[0][1]] = 7
+        
+        for i in range(int(self.oneMan[1] + self.oneManStopperGap + displacement), int(self.oneMan[1] + self.oneManStopperGap + self.stopper + displacement)):
+            table[i, self.poleRanges[0][0]:self.poleRanges[0][1]] = 2
+
+    def addP2OneMan(self, table, displacement=0):
+
+        for i in range(self.wall + displacement, self.wall + self.stopper + displacement):
+            table[i, self.poleRanges[7][0]:self.poleRanges[7][1]] = 2
+            
+        for i in range(int(self.oneMan[0] + displacement), int(self.oneMan[1] + displacement)):
+            table[i, self.poleRanges[7][0]:self.poleRanges[7][1]] = 7
+        
+        for i in range(int(self.oneMan[1] + self.oneManStopperGap + displacement), int(self.oneMan[1] + self.oneManStopperGap + self.stopper + displacement)):
+            table[i, self.poleRanges[7][0]:self.poleRanges[7][1]] = 2   
+
+    def addP1TwoMan(self, table, displacement=0):
+
+        for i in range(self.wall + displacement, self.wall + self.stopper + displacement):
+            table[i, self.poleRanges[1][0]:self.poleRanges[1][1]] = 2
+            
+        for i in range(int(self.twoMen[0][0] + displacement), int(self.twoMen[0][1] + displacement)):
+            table[i, self.poleRanges[1][0]:self.poleRanges[1][1]] = 7
+
+        for i in range(int(self.twoMen[1][0] + displacement), int(self.twoMen[1][1] + displacement)):
+            table[i, self.poleRanges[1][0]:self.poleRanges[1][1]] = 7
+        
+        for i in range(int(self.twoMen[1][1] + displacement), int(self.twoMen[1][1]) + self.stopper + displacement):
+            table[i, self.poleRanges[1][0]:self.poleRanges[1][1]] = 2
+
+    def addP2TwoMan(self, table, displacement=0):
+
+        for i in range(self.wall + displacement, self.wall + self.stopper + displacement):
+            table[i, self.poleRanges[6][0]:self.poleRanges[6][1]] = 2
+            
+        for i in range(int(self.twoMen[0][0] + displacement), int(self.twoMen[0][1] + displacement)):
+            table[i, self.poleRanges[6][0]:self.poleRanges[6][1]] = 7
+
+        for i in range(int(self.twoMen[1][0] + displacement), int(self.twoMen[1][1] + displacement)):
+            table[i, self.poleRanges[6][0]:self.poleRanges[6][1]] = 7
+        
+        for i in range(int(self.twoMen[1][1] + displacement), int(self.twoMen[1][1]) + self.stopper + displacement):
+            table[i, self.poleRanges[6][0]:self.poleRanges[6][1]] = 2
+
+    def addP1ThreeMan(self, table, displacement=0):
+        for i in range(self.wall + displacement, self.wall + self.stopper + displacement):
+            table[i, self.poleRanges[5][0]:self.poleRanges[5][1]] = 2
+            
+        for i in range(int(self.threeMen[0][0] + displacement), int(self.threeMen[0][1] + displacement)):
+            table[i, self.poleRanges[5][0]:self.poleRanges[5][1]] = 7
+
+        for i in range(int(self.threeMen[1][0] + displacement), int(self.threeMen[1][1] + displacement)):
+            table[i, self.poleRanges[5][0]:self.poleRanges[5][1]] = 7
+
+        for i in range(int(self.threeMen[2][0] + displacement), int(self.threeMen[2][1]) + displacement):
+            table[i, self.poleRanges[5][0]:self.poleRanges[5][1]] = 7
+        
+        for i in range(int(self.threeMen[2][1] + displacement), int(self.threeMen[2][1]) + self.stopper + displacement):
+            table[i, self.poleRanges[5][0]:self.poleRanges[5][1]] = 2
+
+    def addP2ThreeMan(self, table, displacement=0):
+        for i in range(self.wall + displacement, self.wall + self.stopper + displacement):
+            table[i, self.poleRanges[2][0]:self.poleRanges[2][1]] = 2
+            
+        for i in range(int(self.threeMen[0][0] + displacement), int(self.threeMen[0][1] + displacement)):
+            table[i, self.poleRanges[2][0]:self.poleRanges[2][1]] = 7
+
+        for i in range(int(self.threeMen[1][0] + displacement), int(self.threeMen[1][1] + displacement)):
+            table[i, self.poleRanges[2][0]:self.poleRanges[2][1]] = 7
+
+        for i in range(int(self.threeMen[2][0] + displacement), int(self.threeMen[2][1]) + displacement):
+            table[i, self.poleRanges[2][0]:self.poleRanges[2][1]] = 7
+        
+        for i in range(int(self.threeMen[2][1] + displacement), int(self.threeMen[2][1]) + self.stopper + displacement):
+            table[i, self.poleRanges[2][0]:self.poleRanges[2][1]] = 2
+
+    def addP1FiveMan(self, table, displacement=0):
+        for i in range(self.wall + displacement, self.wall + self.stopper + displacement):
+            table[i, self.poleRanges[3][0]:self.poleRanges[3][1]] = 2
+            
+        for i in range(int(self.fiveMen[0][0] + displacement), int(self.fiveMen[0][1] + displacement)):
+            table[i, self.poleRanges[3][0]:self.poleRanges[3][1]] = 7
+
+        for i in range(int(self.fiveMen[1][0] + displacement), int(self.fiveMen[1][1] + displacement)):
+            table[i, self.poleRanges[3][0]:self.poleRanges[3][1]] = 7
+
+        for i in range(int(self.fiveMen[2][0] + displacement), int(self.fiveMen[2][1] + displacement)):
+            table[i, self.poleRanges[3][0]:self.poleRanges[3][1]] = 7
+
+        for i in range(int(self.fiveMen[3][0] + displacement), int(self.fiveMen[3][1] + displacement)):
+            table[i, self.poleRanges[3][0]:self.poleRanges[3][1]] = 7
+
+        for i in range(int(self.fiveMen[4][0] + displacement), int(self.fiveMen[4][1] + displacement)):
+            table[i, self.poleRanges[3][0]:self.poleRanges[3][1]] = 7
+
+        for i in range(int(self.fiveMen[4][1] + displacement), int(self.fiveMen[4][1] + displacement) + self.stopper):
+            table[i, self.poleRanges[3][0]:self.poleRanges[3][1]] = 2
+
+    def addP2FiveMan(self, table, displacement=0):
+        for i in range(self.wall + displacement, self.wall + self.stopper + displacement):
+            table[i, self.poleRanges[4][0]:self.poleRanges[4][1]] = 2
+            
+        for i in range(int(self.fiveMen[0][0] + displacement), int(self.fiveMen[0][1] + displacement)):
+            table[i, self.poleRanges[4][0]:self.poleRanges[4][1]] = 7
+
+        for i in range(int(self.fiveMen[1][0] + displacement), int(self.fiveMen[1][1] + displacement)):
+            table[i, self.poleRanges[4][0]:self.poleRanges[4][1]] = 7
+
+        for i in range(int(self.fiveMen[2][0] + displacement), int(self.fiveMen[2][1] + displacement)):
+            table[i, self.poleRanges[4][0]:self.poleRanges[4][1]] = 7
+
+        for i in range(int(self.fiveMen[3][0] + displacement), int(self.fiveMen[3][1] + displacement)):
+            table[i, self.poleRanges[4][0]:self.poleRanges[4][1]] = 7
+
+        for i in range(int(self.fiveMen[4][0] + displacement), int(self.fiveMen[4][1] + displacement)):
+            table[i, self.poleRanges[4][0]:self.poleRanges[4][1]] = 7
+
+        for i in range(int(self.fiveMen[4][1] + displacement), int(self.fiveMen[4][1] + displacement) + self.stopper):
+            table[i, self.poleRanges[4][0]:self.poleRanges[4][1]] = 2
+
+    def buildTable(self, displacements):
 
         table = np.zeros((int(self.width), int(self.length)))
 
@@ -75,16 +213,7 @@ class Table:
 
         ###Add Poles and players
             
-        poleRanges = [
-            [self.oneManGap, self.oneManGap + self.poleWidth],
-            [self.oneManGap + self.poleWidth + self.polegap, self.oneManGap + self.poleWidth + self.polegap + self.poleWidth],
-            [self.oneManGap + 2 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 2 * (self.polegap + self.poleWidth)],
-            [self.oneManGap + 3 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 3 * (self.polegap + self.poleWidth)],
-            [self.oneManGap + 4 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 4 * (self.polegap + self.poleWidth)],
-            [self.oneManGap + 5 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 5 * (self.polegap + self.poleWidth)],
-            [self.oneManGap + 6 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 6 * (self.polegap + self.poleWidth)],
-            [self.oneManGap + 7 * (self.poleWidth + self.polegap), self.oneManGap + self.poleWidth + 7 * (self.polegap + self.poleWidth)],           
-        ]
+        poleRanges = self.poleRanges
         
         print(poleRanges)
         
@@ -126,105 +255,21 @@ class Table:
             table[0:40, i] = 3
             table[-40:, i] = 3  
 
-        ###Add five men
-            
-        for i in range(self.wall, self.wall + self.stopper):
-            table[i, poleRanges[3][0]:poleRanges[3][1]] = 2
-            table[i, poleRanges[4][0]:poleRanges[4][1]] = 2
-            
-        for i in range(int(self.fiveMen[0][0]), int(self.fiveMen[0][1])):
 
-            table[i, poleRanges[3][0]:poleRanges[3][1]] = 7
-            table[i, poleRanges[4][0]:poleRanges[4][1]] = 7
 
-        for i in range(int(self.fiveMen[1][0]), int(self.fiveMen[1][1])):
-
-            table[i, poleRanges[3][0]:poleRanges[3][1]] = 7
-            table[i, poleRanges[4][0]:poleRanges[4][1]] = 7
-
-        for i in range(int(self.fiveMen[2][0]), int(self.fiveMen[2][1])):
-
-            table[i, poleRanges[3][0]:poleRanges[3][1]] = 7
-            table[i, poleRanges[4][0]:poleRanges[4][1]] = 7
-
-        for i in range(int(self.fiveMen[3][0]), int(self.fiveMen[3][1])):
-
-            table[i, poleRanges[3][0]:poleRanges[3][1]] = 7
-            table[i, poleRanges[4][0]:poleRanges[4][1]] = 7
-
-        for i in range(int(self.fiveMen[4][0]), int(self.fiveMen[4][1])):
-
-            table[i, poleRanges[3][0]:poleRanges[3][1]] = 7
-            table[i, poleRanges[4][0]:poleRanges[4][1]] = 7
-
-        for i in range(int(self.fiveMen[4][1]), int(self.fiveMen[4][1]) + self.stopper):
-            table[i, poleRanges[3][0]:poleRanges[3][1]] = 2
-            table[i, poleRanges[4][0]:poleRanges[4][1]] = 2
-
-        #Add three men
-            
-        for i in range(self.wall, self.wall + self.stopper):
-            table[i, poleRanges[2][0]:poleRanges[2][1]] = 2
-            table[i, poleRanges[5][0]:poleRanges[5][1]] = 2
-            
-        for i in range(int(self.threeMen[0][0]), int(self.threeMen[0][1])):
-
-            table[i, poleRanges[2][0]:poleRanges[2][1]] = 7
-            table[i, poleRanges[5][0]:poleRanges[5][1]] = 7
-
-        for i in range(int(self.threeMen[1][0]), int(self.threeMen[1][1])):
-
-            table[i, poleRanges[2][0]:poleRanges[2][1]] = 7
-            table[i, poleRanges[5][0]:poleRanges[5][1]] = 7
-
-        for i in range(int(self.threeMen[2][0]), int(self.threeMen[2][1])):
-
-            table[i, poleRanges[2][0]:poleRanges[2][1]] = 7
-            table[i, poleRanges[5][0]:poleRanges[5][1]] = 7
-        
-        for i in range(int(self.threeMen[2][1]), int(self.threeMen[2][1]) + self.stopper):
-            table[i, poleRanges[2][0]:poleRanges[2][1]] = 2
-            table[i, poleRanges[5][0]:poleRanges[5][1]] = 2
-
-        #Add two men
-            
-        for i in range(self.wall, self.wall + self.stopper):
-            table[i, poleRanges[1][0]:poleRanges[1][1]] = 2
-            table[i, poleRanges[6][0]:poleRanges[6][1]] = 2
-            
-        for i in range(int(self.twoMen[0][0]), int(self.twoMen[0][1])):
-
-            table[i, poleRanges[1][0]:poleRanges[1][1]] = 7
-            table[i, poleRanges[6][0]:poleRanges[6][1]] = 7
-
-        for i in range(int(self.twoMen[1][0]), int(self.twoMen[1][1])):
-
-            table[i, poleRanges[1][0]:poleRanges[1][1]] = 7
-            table[i, poleRanges[6][0]:poleRanges[6][1]] = 7
-        
-        for i in range(int(self.twoMen[1][1]), int(self.twoMen[1][1]) + self.stopper):
-            table[i, poleRanges[1][0]:poleRanges[1][1]] = 2
-            table[i, poleRanges[6][0]:poleRanges[6][1]] = 2
-
-        #add one men
-            
-        for i in range(self.wall, self.wall + self.stopper):
-            table[i, poleRanges[0][0]:poleRanges[0][1]] = 2
-            table[i, poleRanges[7][0]:poleRanges[7][1]] = 2
-            
-        for i in range(int(self.oneMan[0]), int(self.oneMan[1])):
-
-            table[i, poleRanges[0][0]:poleRanges[0][1]] = 7
-            table[i, poleRanges[7][0]:poleRanges[7][1]] = 7
-        
-        for i in range(int(self.oneMan[1] + self.oneManStopperGap), int(self.oneMan[1] + self.oneManStopperGap + self.stopper)):
-            table[i, poleRanges[0][0]:poleRanges[0][1]] = 2
-            table[i, poleRanges[7][0]:poleRanges[7][1]] = 2
+        self.addP1OneMan(table, displacements['P1OneMan'])
+        self.addP2OneMan(table, displacements['P2OneMan'])
+        self.addP1TwoMan(table, displacements['P1TwoMan'])
+        self.addP2TwoMan(table, displacements['P1TwoMan'])
+        self.addP1ThreeMan(table, displacements['P1ThreeMan'])
+        self.addP2ThreeMan(table, displacements['P1ThreeMan'])
+        self.addP1FiveMan(table, displacements['P1FiveMan'])
+        self.addP2FiveMan(table, displacements['P1FiveMan'])
 
         return table
-    
+ 
 
-    def find_valid_angles(self, ballPosition):
+    def find_valid_angles(self, ballPosition, matrix):
         valid_angles = []
 
         ball_x, ball_y = ballPosition
@@ -259,72 +304,176 @@ class Table:
 
 
 
+displacement_sliders = {
+    "P1OneMan": 0,
+    "P2OneMan": 0,
+    "P1TwoMan": 0,
+    "P2TwoMan": 0,
+    "P1ThreeMan": 0,
+    "P2ThreeMan": 0,
+    "P1FiveMan": 0,
+    "P2FiveMan": 0
+}
+
+
 # Instantiate the Table class
 table = Table()
 
 # Build the foosball table matrix
-matrix = table.buildTable()
+matrix = table.buildTable(displacement_sliders)
 
 # Plot the foosball table
 fig, ax = plt.subplots()
-plt.subplots_adjust(bottom=0.25)
+plt.subplots_adjust(bottom=0.35)
 plt.imshow(matrix, cmap='viridis')
 
 # Initial ball position
 ball_x_initial = 560
-ball_y_initial = 140
+ball_y_initial = table.width / 2
 
 # Plot the initial ball position
 ball_plot, = plt.plot(ball_x_initial, ball_y_initial, 'ro')
 
 # Slider for adjusting ball position
-ax_ball_position = plt.axes([0.25, 0.1, 0.65, 0.03])
+ax_ball_position = plt.axes([0.1, 0.2, 0.65, 0.03])
 slider_ball_position = Slider(ax_ball_position, 'Ball Position', 40, table.width - 40, valinit=ball_y_initial)
 
-# Button for updating valid angles
-ax_button = plt.axes([0.8, 0.025, 0.1, 0.04])
-button_update = Button(ax_button, 'Update')
+# Slider for adjusting displacement of P1 OneMan
+ax_p1_oneman_displacement = plt.axes([0.1, 0.1, 0.65, 0.03])
+slider_p1_oneman_displacement = Slider(ax_p1_oneman_displacement, 'P1 OneMan Displacement', 0, 160, valinit=0)
+
+# Slider for adjusting displacement of P2 OneMan
+ax_p2_oneman_displacement = plt.axes([0.1, 0.05, 0.65, 0.03])
+slider_p2_oneman_displacement = Slider(ax_p2_oneman_displacement, 'P2 OneMan Displacement', 0, 160, valinit=0)
+
+# Slider for adjusting displacement of P1 twoman
+ax_p1_twoman_displacement = plt.axes([0.1, 0.1, 0.65, 0.03])
+slider_p1_twoman_displacement = Slider(ax_p1_twoman_displacement, 'P1 twoman Displacement', 0, 160, valinit=0)
+
+# Slider for adjusting displacement of P2 twoman
+ax_p2_twoman_displacement = plt.axes([0.1, 0.05, 0.65, 0.03])
+slider_p2_twoman_displacement = Slider(ax_p2_twoman_displacement, 'P2 twoman Displacement', 0, 160, valinit=0)
+
+# Slider for adjusting displacement of P1 threeman
+ax_p1_threeman_displacement = plt.axes([0.1, 0.1, 0.65, 0.03])
+slider_p1_threeman_displacement = Slider(ax_p1_threeman_displacement, 'P1 threeman Displacement', 0, 160, valinit=0)
+
+# Slider for adjusting displacement of P2 threeman
+ax_p2_threeman_displacement = plt.axes([0.1, 0.05, 0.65, 0.03])
+slider_p2_threeman_displacement = Slider(ax_p2_threeman_displacement, 'P2 threeman Displacement', 0, 160, valinit=0)
+
+# Slider for adjusting displacement of P1 fiveman
+ax_p1_fiveman_displacement = plt.axes([0.1, 0.1, 0.65, 0.03])
+slider_p1_fiveman_displacement = Slider(ax_p1_fiveman_displacement, 'P1 fiveman Displacement', 0, 160, valinit=0)
+
+# Slider for adjusting displacement of P2 fiveman
+ax_p2_fiveman_displacement = plt.axes([0.1, 0.05, 0.65, 0.03])
+slider_p2_fiveman_displacement = Slider(ax_p2_fiveman_displacement, 'P2 fiveman Displacement', 0, 160, valinit=0)
+
+def update_p1_oneman_displacement(val):
+    displacement_sliders["P1OneMan"] = int(val)
+
+def update_p2_oneman_displacement(val):
+    displacement_sliders["P2OneMan"] = int(val)
+
+def update_p1_twoman_displacement(val):
+    displacement_sliders["P1TwoMan"] = int(val)
+
+def update_p2_twoman_displacement(val):
+    displacement_sliders["P2TwoMan"] = int(val)
+
+def update_p1_threeman_displacement(val):
+    displacement_sliders["P1ThreeMan"] = int(val)
+
+def update_p2_threeman_displacement(val):
+    displacement_sliders["P2ThreeMan"] = int(val)
+
+def update_p1_fiveman_displacement(val):
+    displacement_sliders["P1FiveMan"] = int(val)
+
+def update_p2_fiveman_displacement(val):
+    displacement_sliders["P2FiveMan"] = int(val)
+    
+
+def confirm_ball_position(event):
+    ball_y = int(slider_ball_position.val)
+    ball_plot.set_data(ball_x_initial, ball_y)
+    fig.canvas.draw_idle()
+    print(displacement_sliders["P2OneMan"])
+
+def confirm_pieces_position(event):
+    displacement_sliders["P1OneMan"] = int(slider_p1_oneman_displacement.val)
+    displacement_sliders["P2OneMan"] = int(slider_p2_oneman_displacement.val)
+    displacement_sliders["P1TwoMan"] = int(slider_p1_twoman_displacement.val)
+    displacement_sliders["P2TwoMan"] = int(slider_p2_twoman_displacement.val)
+    displacement_sliders["P1ThreeMan"] = int(slider_p1_threeman_displacement.val)
+    displacement_sliders["P2ThreeMan"] = int(slider_p2_threeman_displacement.val)
+    displacement_sliders["P1FiveMan"] = int(slider_p1_fiveman_displacement.val)
+    displacement_sliders["P2FiveMan"] = int(slider_p2_fiveman_displacement.val)
+    
+    new_matrix = table.buildTable(displacement_sliders)
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
+    
+    ball_y = int(slider_ball_position.val)
+    ball_x = ball_x_initial
+
+    valid_angles = table.find_valid_angles((ball_x, ball_y), new_matrix)
+
+    for line in ax.lines:
+        line.remove()
+
+    for line in valid_angles:
+        x, y = line
+        ax.plot([x[0], x[1]], [y[0], y[1]], color="white")
+
+    ball_plot.set_data(ball_x, ball_y)
+    fig.canvas.draw_idle()
+
+
+slider_p1_oneman_displacement.on_changed(update_p1_oneman_displacement)
+slider_p2_oneman_displacement.on_changed(update_p2_oneman_displacement)
+slider_p1_twoman_displacement.on_changed(update_p1_twoman_displacement)
+slider_p2_twoman_displacement.on_changed(update_p2_twoman_displacement)
+slider_p1_threeman_displacement.on_changed(update_p1_threeman_displacement)
+slider_p2_threeman_displacement.on_changed(update_p2_threeman_displacement)
+slider_p1_fiveman_displacement.on_changed(update_p1_fiveman_displacement)
+slider_p2_fiveman_displacement.on_changed(update_p2_fiveman_displacement)
+
+ax_button_confirm_ball = plt.axes([0.1, 0.3, 0.2, 0.04])
+button_confirm_ball = Button(ax_button_confirm_ball, 'Confirm Ball Position')
+button_confirm_ball.on_clicked(confirm_ball_position)
+
+ax_button_confirm_pieces = plt.axes([0.4, 0.3, 0.2, 0.04])
+button_confirm_pieces = Button(ax_button_confirm_pieces, 'Confirm Pieces Position')
+button_confirm_pieces.on_clicked(confirm_pieces_position)
 
 def update(val):
     ball_y = int(val)
     ball_x = ball_x_initial
-    
-    # Plot the updated ball position
     ball_plot.set_data(ball_x, ball_y)
     fig.canvas.draw_idle()
-
-    # Update the initial x coordinate for future slider updates
-    global ball_y_initial
-    ball_y_initial = ball_y
 
 def on_button_press(event):
     ball_y = int(slider_ball_position.val)
     ball_x = ball_x_initial
 
-    # Find valid angles for the updated ball position
-    valid_angles = table.find_valid_angles((ball_x, ball_y))
+    valid_angles = table.find_valid_angles((ball_x, ball_y), matrix)
 
-    # Clear previous valid angles plot
     for line in ax.lines:
         line.remove()
 
-    # Plot the valid angles
     for line in valid_angles:
         x, y = line
         ax.plot([x[0], x[1]], [y[0], y[1]], color="white")
-    
-    # Update the ball position
+
     ball_plot.set_data(ball_x, ball_y)
-    
-    # Update the canvas
     fig.canvas.draw_idle()
 
-    ax.plot(ball_x, ball_y, 'ro')
 
-# Register the update function to the slider
 slider_ball_position.on_changed(update)
-
-# Register the button press function to the button
-button_update.on_clicked(on_button_press)
+ax_button_find_angles = plt.axes([0.7, 0.3, 0.2, 0.04])
+button_find_angles = Button(ax_button_find_angles, 'Find Angles')
+button_find_angles.on_clicked(on_button_press)
 
 plt.show()
