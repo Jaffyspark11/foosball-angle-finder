@@ -238,14 +238,35 @@ class Table:
     def find_valid_angles(self, ballPosition):
         valid_angles = []
 
-        
+        ball_x, ball_y = ballPosition
+        ball_diameter = self.ballDiameter
+
+        for i in range(int(table.goalRange[0]), int(table.goalRange[1]), 8):
             
+            x = [ball_x, 775]
+            y = [ball_y, i]
 
+            rr, cc = line(y[0], x[0], y[1], x[1])
 
-        
-
-
-
+            intersects = False
+            for r, c in zip(rr, cc):
+                # Check if any point within the ball diameter intersects with a player piece
+                for dr in range(-ball_diameter // 2, ball_diameter // 2 + 1):
+                    for dc in range(-ball_diameter // 2, ball_diameter // 2 + 1):
+                        if matrix[r + dr, c + dc] == 7:
+                            intersects = True
+                            break
+                    if intersects:
+                        break
+                if intersects:
+                    break
+            
+            if not intersects:
+                # Iterate through each point of the line and plot it
+                valid_angles.append((rr, cc))
+                for r, c in zip(rr, cc):
+                    plt.plot(c, r, color="white", marker='.', markersize=1)
+            
         return valid_angles
 
 
@@ -259,27 +280,13 @@ matrix = table.buildTable()
 
 
 
-for i in range(int(table.goalRange[0]), int(table.goalRange[1]), 8):
-    
-    x = [550, 775]
-    y = [80, i]
 
-    rr, cc = line(y[0], x[0], y[1], x[1])
-
-    intersects = False
-    for r, c in zip(rr, cc):
-        if matrix[r, c] == 7:
-            intersects = True
-            break
-    
-    if not intersects:
-        # Iterate through each point of the line and plot it
-        for r, c in zip(rr, cc):
-            plt.plot(c, r, color="white", marker='.', markersize=1)
 
 # Plot the foosball table
 plt.imshow(matrix, cmap='viridis')
 
+angles = table.find_valid_angles((600,150))
+print(angles)
 plt.colorbar()
 plt.show()
 
