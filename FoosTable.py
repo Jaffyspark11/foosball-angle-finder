@@ -1,3 +1,4 @@
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, Slider
@@ -192,7 +193,7 @@ class Table:
         for i in range(int(self.fiveMen[4][1] + displacement), int(self.fiveMen[4][1] + displacement) + self.stopper):
             table[i, self.poleRanges[4][0]:self.poleRanges[4][1]] = 2
 
-    def buildTable(self, displacements):
+    def buildTable(self, displacements, ball_position):
 
         table = np.zeros((int(self.width), int(self.length)))
 
@@ -266,6 +267,18 @@ class Table:
         self.addP1FiveMan(table, displacements['P1FiveMan'])
         self.addP2FiveMan(table, displacements['P1FiveMan'])
 
+        #add Ball
+
+        ballPositionY, ballPositionX = ball_position
+        
+
+        ballY = (int(ballPositionY - self.ballDiameter / 2), int(ballPositionY + self.ballDiameter / 2))
+        ballX = (int(ballPositionX - self.ballDiameter / 2), int(ballPositionX + self.ballDiameter / 2))
+
+        for i in range(ballX[0], ballX[1]):
+
+            table[i, ballY[0]:ballY[1]] = 8
+
         return table
  
 
@@ -299,7 +312,47 @@ class Table:
                 # Plot the line using only the endpoints
                 valid_angles.append((x, y))
 
+        print(valid_angles)
         return valid_angles
+    
+
+    def calculate_range_of_angles(self, valid_angles):
+
+        range_of_angles = []
+
+        a1, b1 = np.abs(valid_angles[0][0][0] - valid_angles[0][0][1]) , (valid_angles[0][1][0] - valid_angles[0][1][1])
+        print(b1, a1)
+
+        # Calculate the tangent of the angle
+        tangent1 = b1 / a1
+        
+        # Find the angle in radians using the inverse tangent function
+        angle_rad1 = math.atan(tangent1)
+        
+        # Convert the angle from radians to degrees
+        angle_deg1 = math.degrees(angle_rad1)
+
+        range_of_angles.append(angle_deg1)
+
+
+        #### last in list of valid lines
+
+        a2, b2 = np.abs(valid_angles[-1][0][0] - valid_angles[-1][0][1]) , (valid_angles[-1][1][0] - valid_angles[-1][1][1])
+        print(b2, a2)
+
+        # Calculate the tangent of the angle
+        tangent2 = b2 / a2
+        
+        # Find the angle in radians using the inverse tangent function
+        angle_rad2 = math.atan(tangent2)
+        
+        # Convert the angle from radians to degrees
+        angle_deg2 = math.degrees(angle_rad2)
+
+        range_of_angles.append(angle_deg2)       
+
+
+        return range_of_angles
 
 
 
@@ -319,21 +372,24 @@ displacement_sliders = {
 # Instantiate the Table class
 table = Table()
 
-# Build the foosball table matrix
-matrix = table.buildTable(displacement_sliders)
-
-fig, ax = plt.subplots(figsize=(10, 8))
-plt.subplots_adjust(bottom=0.4, left=0.1, right=0.9, top=0.95)
-plt.imshow(matrix, cmap='viridis')
-
 # Initial ball position
-ball_x_initial = 560
+ball_x_initial = 555
 ball_y_initial = table.width / 2
+
+
 
 ballPosition = {
     "ball_x": int(ball_x_initial),
     "ball_y": int(ball_y_initial),
 }
+
+# Build the foosball table matrix
+matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
+
+fig, ax = plt.subplots(figsize=(10, 8))
+plt.subplots_adjust(bottom=0.4, left=0.1, right=0.9, top=0.95)
+plt.imshow(matrix, cmap='viridis')
+
 
 # Plot the initial ball position
 ball_plot, = plt.plot(ballPosition['ball_x'], ballPosition['ball_y'], 'ro')
@@ -377,49 +433,49 @@ slider_p2_fiveman_displacement = Slider(ax_p2_fiveman_displacement, 'P2 fiveman 
 
 def update_p1_oneman_displacement(val):
     displacement_sliders["P1OneMan"] = int(val)
-    new_matrix = table.buildTable(displacement_sliders)
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
 
 def update_p2_oneman_displacement(val):
     displacement_sliders["P2OneMan"] = int(val)
-    new_matrix = table.buildTable(displacement_sliders)
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
 
 def update_p1_twoman_displacement(val):
     displacement_sliders["P1TwoMan"] = int(val)
-    new_matrix = table.buildTable(displacement_sliders)
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
 
 def update_p2_twoman_displacement(val):
     displacement_sliders["P2TwoMan"] = int(val)
-    new_matrix = table.buildTable(displacement_sliders)
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
 
 def update_p1_threeman_displacement(val):
     displacement_sliders["P1ThreeMan"] = int(val)
-    new_matrix = table.buildTable(displacement_sliders)
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
 
 def update_p2_threeman_displacement(val):
     displacement_sliders["P2ThreeMan"] = int(val)
-    new_matrix = table.buildTable(displacement_sliders)
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
 
 def update_p1_fiveman_displacement(val):
     displacement_sliders["P1FiveMan"] = int(val)
-    new_matrix = table.buildTable(displacement_sliders)
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
 
 def update_p2_fiveman_displacement(val):
     displacement_sliders["P2FiveMan"] = int(val)
-    new_matrix = table.buildTable(displacement_sliders)
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
     ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()   
 
@@ -434,14 +490,16 @@ def find_angles_from_position(event):
     displacement_sliders["P1FiveMan"] = int(slider_p1_fiveman_displacement.val)
     displacement_sliders["P2FiveMan"] = int(slider_p2_fiveman_displacement.val)
     
-    new_matrix = table.buildTable(displacement_sliders)
-    ax.imshow(new_matrix, cmap='viridis')
-    fig.canvas.draw_idle()
-    
     ball_y = ballPosition['ball_y']
     ball_x = ballPosition['ball_x']
 
+    new_matrix = table.buildTable(displacement_sliders, (ball_x, ball_y))
+    ax.imshow(new_matrix, cmap='viridis')
+    fig.canvas.draw_idle()
+    
     valid_angles = table.find_valid_angles((ball_x, ball_y), new_matrix)
+
+    range_of_angles = table.calculate_range_of_angles(valid_angles)
 
     for line in ax.lines:
         line.remove()
@@ -454,6 +512,7 @@ def find_angles_from_position(event):
     fig.canvas.draw_idle()
 
     update(slider_ball_position.val)
+    print(range_of_angles)
 
 
 slider_p1_oneman_displacement.on_changed(update_p1_oneman_displacement)
@@ -473,7 +532,8 @@ button_confirm_pieces.on_clicked(find_angles_from_position)
 def update(val):
     ballPosition['ball_y'] = int(val)
     ballPosition['ball_x'] = ball_x_initial
-    ball_plot.set_data(ballPosition['ball_x'], ballPosition['ball_y'])
+    new_matrix = table.buildTable(displacement_sliders, (ballPosition['ball_x'], ballPosition['ball_y']))
+    ax.imshow(new_matrix, cmap='viridis')
     fig.canvas.draw_idle()
 
 
